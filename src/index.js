@@ -21,7 +21,8 @@ export default class Poll extends Component {
     onVote: PropTypes.func.isRequired,
     customStyles: PropTypes.object,
     noStorage: PropTypes.bool,
-    vote: PropTypes.string
+    vote: PropTypes.string,
+    theme: PropTypes.array.isRequired
   };
 
   static defaultProps = {
@@ -30,8 +31,8 @@ export default class Poll extends Component {
       questionSeparatorWidth: "question",
       questionBold: true,
       questionColor: "#303030",
-      align: "center",
-      theme: "black"
+      align: "center"
+      //theme: "black"
     },
     noStorage: false
   };
@@ -139,16 +140,41 @@ export default class Poll extends Component {
 
   obtainColors = customTheme => {
     const colors = themes[customTheme];
-    if (!colors) {
+    if (colors === null) {
+      console.log("通貨！！！");
+
       return themes["black"];
     }
     return colors;
   };
 
   render() {
-    const { question, answers, customStyles } = this.props;
+    const { question, answers, customStyles, theme } = this.props;
     const { poll, totalVotes } = this.state;
-    const colors = this.obtainColors(customStyles.theme);
+    //const colors = this.obtainColors(customStyles.theme);
+    let color = [];
+    let colors = [];
+    for (let i = 0; i < theme.length; i++) {
+      console.log(theme[i]);
+      let color = this.obtainColors(theme[i]);
+      colors.push(color);
+    }
+    console.log("colors,", colors);
+    console.log("colors[0][0],", colors[0][0]);
+
+    for (let i = 0; i < theme.length; i++) {
+      console.log("colors[index][o]", colors[i][0]);
+    }
+
+    /*colors = theme.map(p => {
+      let color = this.obtainColors(p);
+      console.log(color);
+      colors.push(color);
+      return colors;
+    });
+    console.log("colors,", colors);
+    */
+    let test = "成功";
 
     return (
       <article
@@ -173,35 +199,42 @@ export default class Poll extends Component {
           {question}
         </h3>
         <ul className={styles.answers}>
-          {answers.map(answer => (
+          {answers.map((answer, index, value) => (
             <li key={answer.option}>
               {!poll.voted ? (
                 <button
                   className={`${animate.animated} ${animate.fadeIn} ${
                     animate.faster
-                  } ${styles.option} ${styles[customStyles.theme]}`}
-                  style={{ color: colors[0], borderColor: colors[1] }}
+                  } ${styles.option} ${styles[theme[index]]}`}
+                  style={{
+                    color: colors[index][0],
+                    borderColor: colors[index][1]
+                  }}
                   type="button"
                   onClick={() => this.vote(answer.option)}
                 >
                   {answer.option}
+                  {console.log("colors[index][0]", test)}
                 </button>
               ) : (
                 <div
                   className={`${animate.animated} ${animate.fadeIn} ${animate.faster} ${styles.result}`}
-                  style={{ color: colors[0], borderColor: colors[1] }}
+                  style={{
+                    color: colors[index][0],
+                    borderColor: colors[index][1]
+                  }}
                 >
                   <div
                     className={styles.fill}
                     style={{
                       width: this.calculatePercent(answer.votes, totalVotes),
-                      backgroundColor: colors[2]
+                      backgroundColor: colors[index][2]
                     }}
                   />
                   <div className={styles.labels}>
                     <span
                       className={styles.percent}
-                      style={{ color: colors[0] }}
+                      style={{ color: colors[index][0] }}
                     >
                       {this.calculatePercent(answer.votes, totalVotes)}
                     </span>
@@ -209,7 +242,7 @@ export default class Poll extends Component {
                       className={`${styles.answer} ${
                         answer.option === poll.option ? styles.vote : ""
                       }`}
-                      style={{ color: colors[0] }}
+                      style={{ color: colors[index][0] }}
                     >
                       {answer.option}
                     </span>

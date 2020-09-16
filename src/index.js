@@ -141,8 +141,6 @@ export default class Poll extends Component {
   obtainColors = customTheme => {
     const colors = themes[customTheme];
     if (colors === null) {
-      console.log("通貨！！！");
-
       return themes["black"];
     }
     return colors;
@@ -155,15 +153,8 @@ export default class Poll extends Component {
     let color = [];
     let colors = [];
     for (let i = 0; i < theme.length; i++) {
-      console.log(theme[i]);
       let color = this.obtainColors(theme[i]);
       colors.push(color);
-    }
-    console.log("colors,", colors);
-    console.log("colors[0][0],", colors[0][0]);
-
-    for (let i = 0; i < theme.length; i++) {
-      console.log("colors[index][o]", colors[i][0]);
     }
 
     /*colors = theme.map(p => {
@@ -174,7 +165,6 @@ export default class Poll extends Component {
     });
     console.log("colors,", colors);
     */
-    let test = "成功";
 
     return (
       <article
@@ -199,7 +189,7 @@ export default class Poll extends Component {
           {question}
         </h3>
         <ul className={styles.answers}>
-          {answers.map((answer, index, value) => (
+          {answers.map((answer, index) => (
             <li key={answer.option}>
               {!poll.voted ? (
                 <button
@@ -214,7 +204,6 @@ export default class Poll extends Component {
                   onClick={() => this.vote(answer.option)}
                 >
                   {answer.option}
-                  {console.log("colors[index][0]", test)}
                 </button>
               ) : (
                 <div

@@ -22,7 +22,8 @@ export default class Poll extends Component {
     customStyles: PropTypes.object,
     noStorage: PropTypes.bool,
     vote: PropTypes.string,
-    theme: PropTypes.array.isRequired
+    theme: PropTypes.array.isRequired,
+    voteflag_done: PropTypes.bool.isRequired
   };
 
   static defaultProps = {
@@ -191,7 +192,7 @@ export default class Poll extends Component {
         <ul className={styles.answers}>
           {answers.map((answer, index) => (
             <li key={answer.option}>
-              {!poll.voted ? (
+              {!poll.voted && this.props.voteflag_done ? (
                 <button
                   className={`${animate.animated} ${animate.fadeIn} ${
                     animate.faster

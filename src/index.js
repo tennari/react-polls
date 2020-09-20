@@ -60,7 +60,8 @@ export default class Poll extends Component {
     const { question } = this.props;
     const storage = this.getStoragePolls();
     const answer = storage.filter(
-      answer => answer.question === question && answer.url === location.href
+      answer =>
+        answer.question === question && answer.url === window.location.href
     );
 
     if (answer.length) {
@@ -70,10 +71,7 @@ export default class Poll extends Component {
 
   loadVotes = () => {
     const { answers, vote } = this.props;
-    const totalVotes = answers.reduce(
-      (total, answer) => total + answer.votes,
-      0
-    );
+    //const totalVotes = answers.reduce((total, answer) => total + answer.votes,0);
     this.setState({
       totalVotes: answers.reduce((total, answer) => total + answer.votes, 0)
     });
@@ -111,7 +109,7 @@ export default class Poll extends Component {
     if (!noStorage) {
       const storage = this.getStoragePolls();
       storage.push({
-        url: location.href,
+        url: window.location.href,
         question: question,
         option: answer
       });
@@ -151,7 +149,7 @@ export default class Poll extends Component {
     const { question, answers, customStyles, theme } = this.props;
     const { poll, totalVotes } = this.state;
     //const colors = this.obtainColors(customStyles.theme);
-    let color = [];
+    //let color = [];
     let colors = [];
     for (let i = 0; i < theme.length; i++) {
       let color = this.obtainColors(theme[i]);
@@ -192,7 +190,7 @@ export default class Poll extends Component {
         <ul className={styles.answers}>
           {answers.map((answer, index) => (
             <li key={answer.option}>
-              {!poll.voted && this.props.voteflag_done ? (
+              {!poll.voted && !this.props.voteflag_done ? (
                 <button
                   className={`${animate.animated} ${animate.fadeIn} ${
                     animate.faster

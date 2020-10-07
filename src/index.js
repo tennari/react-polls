@@ -23,7 +23,8 @@ export default class Poll extends Component {
     noStorage: PropTypes.bool,
     vote: PropTypes.string,
     theme: PropTypes.array.isRequired,
-    voteflag_done: PropTypes.bool.isRequired
+    voteflag_done: PropTypes.bool.isRequired,
+    user_flag: PropTypes.bool
   };
 
   static defaultProps = {
@@ -35,7 +36,8 @@ export default class Poll extends Component {
       align: "center"
       //theme: "black"
     },
-    noStorage: false
+    noStorage: false,
+    user_flag: false
   };
 
   state = {
@@ -105,7 +107,15 @@ export default class Poll extends Component {
   getStoragePolls = () => JSON.parse(localStorage.getItem("react-polls")) || [];
 
   vote = answer => {
-    const { question, onVote, noStorage } = this.props;
+    const { question, onVote, noStorage, user_flag } = this.props;
+    onVote(answer);
+
+    if (user_flag === false) {
+      // console.log("成功？");
+      return;
+    }
+    //    console.log("成功？??");
+
     if (!noStorage) {
       const storage = this.getStoragePolls();
       storage.push({
@@ -117,7 +127,6 @@ export default class Poll extends Component {
     }
 
     this.setPollVote(answer);
-    onVote(answer);
   };
 
   calculatePercent = (votes, total) => {
